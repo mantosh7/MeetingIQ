@@ -12,5 +12,6 @@ model Meeting {
   title      String
   transcript String   @db.LongText
   summary    String   @db.LongText
+  tasks      Json?
   createdAt  DateTime @default(now())
 }
