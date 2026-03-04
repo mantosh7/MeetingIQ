@@ -66,7 +66,7 @@ def analyze_with_llm(transcript):
 
     try:
         cleaned = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        cleaned = re.sub(r'//.*', '', cleaned)  # // comments hata do
+        cleaned = re.sub(r'//.*', '', cleaned)  # // comments hatane ka logic
         return fix_nulls(json.loads(cleaned))
     except json.JSONDecodeError:
         return {"summary": raw, "participants": [], "action_items": []}
