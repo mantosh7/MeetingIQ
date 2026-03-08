@@ -2,8 +2,6 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import whisper
 import os
-import re
-import json
 import uuid
 from dotenv import load_dotenv
 from groq import Groq
