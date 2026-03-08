@@ -11,12 +11,12 @@ const groq = new Groq({
 
 const FASTAPI_URL = process.env.FASTAPI_URL || "http://localhost:8000";
 
-// Text transcript se summary + action items (existing flow)
+// Text transcript se summary + action items
 export const generateSummary = async (transcript) => {
   const prompt = `
   Analyze this meeting transcript carefully.
 
-  Return ONLY valid JSON (no extra text, no markdown) with this exact structure:
+  Return ONLY valid JSON with this structure (no comments, no extra text, no duplicate tasks):
   {
     "summary": "2-3 sentence summary of the meeting",
     "participants": ["name1", "name2"],
@@ -30,6 +30,12 @@ export const generateSummary = async (transcript) => {
     ]
   }
 
+  IMPORTANT:
+  - Extract EVERY task or action item mentioned, do not skip any
+  - Do not merge multiple tasks into one
+  - due_date mein sirf YYYY-MM-DD format ya JSON null (not the string "null")
+  - assignee mein sirf naam ya JSON null (not the string "null")
+
   Transcript:
   ${transcript}
   `;
@@ -37,6 +43,7 @@ export const generateSummary = async (transcript) => {
   const response = await groq.chat.completions.create({
     model: "llama-3.1-8b-instant",
     messages: [{ role: "user", content: prompt }],
+    temperature: 0
   });
 
   const raw = response.choices[0].message.content;
@@ -50,7 +57,7 @@ export const generateSummary = async (transcript) => {
       .trim();
     return JSON.parse(cleaned);
   } catch {
-    // fallback agar JSON parse fail ho
+    // fallback agar JSON parse fail ho jaye to
     return { summary: raw, participants: [], action_items: [] };
   }
 };
@@ -58,11 +65,9 @@ export const generateSummary = async (transcript) => {
 // Audio file FastAPI ke Whisper endpoint pe bhejo
 export const analyzeMeetingAudio = async (audioFilePath) => {
   const formData = new FormData();
-  formData.append("file", fs.createReadStream(audioFilePath));
+  formData.append("file", fs.createReadStream(audioFilePath));  // streaming audio file in chunks (to avoid RAM overload)
 
-  const response = await axios.post(
-    `${FASTAPI_URL}/analyze-meeting`,
-    formData,
+  const response = await axios.post(`${FASTAPI_URL}/analyze-meeting`, formData,
     {
       headers: {
         ...formData.getHeaders(),

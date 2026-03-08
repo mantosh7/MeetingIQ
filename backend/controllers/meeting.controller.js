@@ -5,7 +5,7 @@ import fs from "fs";
 export const createMeeting = async (req, res, next) => {
   try {
     const { title, transcript } = req.body;
-    const audioFile = req.file; // multer se aayega agar audio upload kiya
+    const audioFile = req.file;
 
     if (!title) {
       return res.status(400).json({ message: "Title is required" });
@@ -16,27 +16,23 @@ export const createMeeting = async (req, res, next) => {
     let tasks = null;
 
     if (audioFile) {
-      // --- AUDIO FLOW ---
-      // FastAPI ke /analyze-meeting endpoint pe bhejo
       const result = await analyzeMeetingAudio(audioFile.path);
 
-      // Temp audio file delete karo
-      if (fs.existsSync(audioFile.path)) {
-        fs.unlinkSync(audioFile.path);
-      }
-
-      if (!result.success) {
-        return res.status(500).json({ message: "Audio analysis failed", error: result.error });
+      if (!result || !result.transcript) {
+        return res.status(500).json({
+          message: "Audio analysis failed",
+          error: result?.error || "Unknown error"
+        });
       }
 
       finalTranscript = result.transcript;
-      summary = result.analysis.summary || "";
-      tasks = result.analysis.action_items || null;
+      const aiResult = await generateSummary(finalTranscript);
+      summary = aiResult.summary || "";
+      tasks = aiResult.action_items || null;
 
     } else if (finalTranscript) {
-      // --- TEXT TRANSCRIPT FLOW ---
       const aiResult = await generateSummary(finalTranscript);
-      summary = aiResult.summary || aiResult; // backward compatible
+      summary = aiResult.summary || aiResult;
       tasks = aiResult.action_items || null;
 
     } else {
@@ -50,19 +46,17 @@ export const createMeeting = async (req, res, next) => {
       tasks: tasks || null,
     });
 
-    res.status(201).json({
-      success: true,
-      data: meeting,
-    });
+    res.status(201).json({ success: true, data: meeting });
 
   } catch (error) {
-    // Agar error ke time audio file abhi bhi exist kare toh delete karo
+    next(error);
+  } finally {
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
-    next(error);
   }
 };
+
 
 export const getAllMeeting = async (req, res, next) => {
   try {
