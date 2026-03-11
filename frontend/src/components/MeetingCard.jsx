@@ -1,5 +1,5 @@
 function MeetingCard({ meeting }) {
-  const highPriorityCount = meeting.tasks?.filter(t => t.priority === 'High').length || 0
+  const highPriorityCount = meeting.tasks.filter(t => t.priority === 'High').length
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
@@ -13,7 +13,7 @@ function MeetingCard({ meeting }) {
 
       <div className="flex items-center gap-4 text-xs text-gray-400 mb-3">
         <span>📅 {new Date(meeting.createdAt).toLocaleDateString()}</span>
-        <span>✓ {meeting.tasks?.length || 0} actions</span>
+        <span>✓ {meeting.tasks.length} actions</span>
       </div>
 
       {highPriorityCount > 0 && (
