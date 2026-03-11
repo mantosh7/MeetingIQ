@@ -9,6 +9,7 @@ function Dashboard() {
   const [meetings, setMeetings] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [search, setSearch] = useState('')
 
   // fetching all the meetings (history)
   async function fetchAllMeeting() {
@@ -30,9 +31,14 @@ function Dashboard() {
     fetchAllMeeting()
   }, [])
 
+  // search filter
+  const filteredMeetings = meetings.filter((m) =>
+    m.title.toLowerCase().includes(search.toLowerCase())
+  )
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar onNewMeeting={() => setShowModal(true)} />
+      <Navbar onNewMeeting={() => setShowModal(true)} search={search} setSearch={setSearch} />
       <div className="max-w-6xl mx-auto px-6 py-8">
 
         <div className="grid grid-cols-4 gap-4 mb-8">
@@ -46,14 +52,15 @@ function Dashboard() {
           <p className="text-gray-400 text-center">Loading...</p>
         ) : (
           <div className="grid grid-cols-3 gap-4">
-            {meetings.map((meeting) => (
+            {/* to display filtered meeting (if anyone filtered, otherwise whole meetings) */}
+            {filteredMeetings.map((meeting) => (
               <MeetingCard key={meeting.id} meeting={meeting} />
             ))}
           </div>
         )}
 
       </div>
-      
+
       {/* to display/hide new meeting modal*/}
       {showModal && (
         <NewMeetingModal
