@@ -1,9 +1,14 @@
+import { useNavigate } from 'react-router-dom'
+
 function MeetingCard({ meeting }) {
+  const navigate = useNavigate()
   const highPriorityCount = meeting.tasks.filter(t => t.priority === 'High').length
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
-      
+    <div
+      onClick={() => navigate(`/meeting/${meeting.id}`)}
+      className="bg-white rounded-2xl p-6 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+    >
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-semibold text-gray-800">{meeting.title}</h3>
         <span className="text-gray-400">›</span>
@@ -21,7 +26,6 @@ function MeetingCard({ meeting }) {
           {highPriorityCount} High Priority
         </span>
       )}
-
     </div>
   )
 }
