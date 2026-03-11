@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 whisper_model = whisper.load_model("base")
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
