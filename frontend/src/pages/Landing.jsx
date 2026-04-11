@@ -1,78 +1,91 @@
-import { useNavigate } from 'react-router-dom'
-import meetingImage from "../assets/LandingPageImage.png";
+import { useState } from "react";
+import landingPageImage from "../assets/landingpage.png";
+import {useNavigate} from "react-router-dom" ;
 
-function Landing() {
-    const navigate = useNavigate()
+export default function MeetingIQHomepage() {
+    const [email, setEmail] = useState("");
+    const navigate = useNavigate() ;
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%)',
-            backgroundImage: `url(${meetingImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 80px',
-            gap: '60px'
-        }}>
+        <div className="h-screen overflow-hidden flex flex-col bg-[#F5F4FA]">
 
-            {/* Left Side */}
-            <div style={{ flex: 1 }}>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
-                    <div style={{
-                        background: '#7c3aed', color: 'white', borderRadius: '50%',
-                        width: '42px', height: '42px', display: 'flex',
-                        alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '18px'
-                    }}>
+            {/* ── NAV ── */}
+            <nav className="flex items-center justify-between px-12 h-16 shrink-0 z-50">
+                <div className="flex items-center gap-3 ml-10">
+                    <div className="w-9 h-9 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
                         M
                     </div>
-                    <span style={{ fontSize: '22px', fontWeight: '600', color: '#1f2937' }}>MeetingIQ</span>
+                    <span className="text-black font-semibold text-lg">
+                        MeetingIQ
+                    </span>
                 </div>
 
-                <p style={{ color: '#7c3aed', fontSize: '12px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '16px' }}>
-                    AI Powered Meetings
-                </p>
+                <div className="flex items-center">
+                    <button onClick={()=>navigate("/signup")} className="text-sm px-5 py-2 rounded-full bg-purple-600 text-white font-medium mr-4 hover:bg-purple-700 transition-colors">
+                        Register
+                    </button>
+                    <button onClick={()=>navigate("/login")} className="text-sm px-5 py-2 rounded-full bg-purple-600 text-white font-medium mr-10 hover:bg-purple-700 transition-colors">
+                        Log In
+                    </button>
+                </div>
+            </nav>
 
-                <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#1f2937', lineHeight: '1.15', marginBottom: '24px' }}>
-                    Turn Meetings <br /> into Action
-                </h1>
+            {/* ── HERO ── */}
+            <div className="flex items-center flex-1 px-12 gap-20 overflow-hidden">
 
-                <p style={{ color: '#9ca3af', fontSize: '17px', lineHeight: '1.8', maxWidth: '420px', marginBottom: '44px' }}>
-                    Upload your meeting audio or paste transcript — MeetingIQ extracts key insights, action items, and summaries using AI.
-                </p>
+                {/* LEFT */}
+                <div className="flex-1 max-w-lg ml-40">
 
-                <button
-                    onClick={() => navigate('/login')}
-                    style={{
-                        background: '#7c3aed', color: 'white', padding: '14px 36px',
-                        borderRadius: '999px', fontSize: '15px', fontWeight: '600',
-                        border: 'none', cursor: 'pointer'
-                    }}
-                    onMouseEnter={e => e.target.style.background = '#6d28d9'}
-                    onMouseLeave={e => e.target.style.background = '#7c3aed'}
-                >
-                    Get Started →
-                </button>
+                    <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200 mb-5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
+                        Powered by Whisper + Groq LLaMA 3.1
+                    </div>
+
+                    <h1 className="text-5xl font-semibold leading-tight text-[#1a1a2e] mb-4 tracking-tight">
+                        You Have Meetings,
+                        <br />
+                        We Have{" "}
+                        <span className="text-purple-600">Brilliant</span>
+                        <br />
+                        <span className="text-purple-600">Insights.</span>
+                    </h1>
+
+                    <p className="text-sm text-gray-500 leading-relaxed mb-7 max-w-sm">
+                        Upload any recording and get AI-powered summaries, action items,
+                        assignees and deadlines — 100% offline, no data leaks.
+                    </p>
+
+                    <div className="flex items-center bg-white border border-purple-100 rounded-full pl-5 pr-1 py-1 max-w-sm mb-3 shadow-sm">
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="flex-1 text-sm text-gray-700 bg-transparent outline-none placeholder-gray-300"
+                        />
+                        <button className="text-sm px-5 py-2 bg-purple-600 text-white rounded-full font-medium hover:bg-purple-700 transition-colors whitespace-nowrap">
+                            Get Started
+                        </button>
+                    </div>
+
+                    <p className="text-xs text-gray-400 flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded-full bg-purple-600 text-white flex items-center justify-center text-[9px]">
+                            ✓
+                        </span>
+                        Free to try · No credit card required · 100% offline
+                    </p>
+                </div>
+
+                {/* RIGHT */}
+                <div className="flex-1 flex items-center justify-center relative h-full">
+                    <img
+                        src={landingPageImage}
+                        alt="MeetingIQ Dashboard"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
 
             </div>
-
-            {/* Right Side */}
-            {/* <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                <img
-                    src={meetingImage}
-                    alt="Team Meeting"
-                    style={{
-                        width: '100%', maxWidth: '540px', height: '440px',
-                        objectFit: 'cover', borderRadius: '24px',
-                        boxShadow: '0 25px 60px rgba(124, 58, 237, 0.15)'
-                    }}
-                />
-            </div> */}
-
         </div>
-    )
+    );
 }
-
-export default Landing

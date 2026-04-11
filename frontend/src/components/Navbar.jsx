@@ -1,6 +1,6 @@
 function Navbar({ onNewMeeting, search, setSearch }) {
   return (
-    <nav className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <nav className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-evenly">
       <div className="flex items-center gap-2">
         <div className="bg-purple-600 text-white rounded-full w-9 h-9 flex items-center justify-center font-bold">
           M

@@ -11,7 +11,7 @@ function Dashboard() {
   const [showModal, setShowModal] = useState(false)
   const [search, setSearch] = useState('')
 
-  // fetching all the meetings (history)
+
   async function fetchAllMeeting() {
     try {
       const response = await axios.get('http://localhost:5000/api/meetings/all')
@@ -52,7 +52,6 @@ function Dashboard() {
           <p className="text-gray-400 text-center">Loading...</p>
         ) : (
           <div className="grid grid-cols-3 gap-4">
-            {/* to display filtered meeting (if anyone filtered, otherwise whole meetings) */}
             {filteredMeetings.map((meeting) => (
               <MeetingCard key={meeting.id} meeting={meeting} />
             ))}
