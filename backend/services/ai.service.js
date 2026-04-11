@@ -12,7 +12,7 @@ const groq = new Groq({
 const FASTAPI_URL = process.env.FASTAPI_URL || "http://localhost:8000";
 
 // Text transcript se summary + action items
-export const generateSummary = async (transcript) => {
+export const generateSummary = async (transcript, model = "llama-3.3-70b-versatile") => {
   const prompt = `
   Analyze this meeting transcript carefully.
 
@@ -41,7 +41,7 @@ export const generateSummary = async (transcript) => {
   `;
 
   const response = await groq.chat.completions.create({
-    model: "llama-3.1-8b-instant",
+    model: model,
     messages: [{ role: "user", content: prompt }],
     temperature: 0
   });

@@ -26,7 +26,7 @@ export const createMeeting = async (req, res, next) => {
       }
 
       finalTranscript = result.transcript;
-      const aiResult = await generateSummary(finalTranscript);
+      const aiResult = await generateSummary(finalTranscript, "llama-3.3-70b-versatile");
       summary = aiResult.summary || "";
       tasks = aiResult.action_items || null;
 
@@ -49,7 +49,13 @@ export const createMeeting = async (req, res, next) => {
     res.status(201).json({ success: true, data: meeting });
 
   } catch (error) {
-    next(error);
+    
+    // Agar JSON parse fail bhi ho, toh structured fallback do
+    return {
+      summary: raw.substring(0, 500), // raw text ko cap karo
+      participants: [],
+      action_items: []
+    };
   } finally {
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
