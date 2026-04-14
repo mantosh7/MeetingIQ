@@ -6,14 +6,18 @@ export const createMeetingService = async (meetingData)=>{
     }) ;
 } ;
 
-export const getAllMeetingService = async()=>{
+export const getAllMeetingService = async (userId) => {
     return prisma.meeting.findMany({
-        orderBy:{createdAt:"desc"}
-    }) ;
-} ;
+        where: { userId }, 
+        orderBy: { createdAt: "desc" }
+    });
+};
 
-export const getMeetingByIdService = async(id)=>{
-    return prisma.meeting.findUnique({
-        where:{id:Number(id)}
-    }) ;
-} ;
+export const getMeetingByIdService = async (id, userId) => {
+    return prisma.meeting.findFirst({
+        where: {
+            id: Number(id),
+            userId   //  ownership check
+        }
+    });
+};

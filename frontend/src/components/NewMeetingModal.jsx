@@ -5,7 +5,7 @@ function NewMeetingModal({ onClose, onMeetingCreated }) {
     const [title, setTitle] = useState('')
     const [transcript, setTranscript] = useState('')
     const [audioFile, setAudioFile] = useState(null)
-    const [mode, setMode] = useState('transcript') // 'transcript' ya 'audio'
+    const [mode, setMode] = useState('transcript') // 'transcript' or 'audio'
     const [loading, setLoading] = useState(false)
 
     // handle new meeting submission
@@ -25,8 +25,8 @@ function NewMeetingModal({ onClose, onMeetingCreated }) {
 
         try {
             setLoading(true)
-            await axios.post('http://localhost:5000/api/meetings/create', formData)
-            onMeetingCreated() // dashboard refresh karo
+            await axios.post('/api/meetings/create', formData, { withCredentials: true })
+            onMeetingCreated() // refreshing dashboard
             onClose()
         } catch (err) {
             console.log(err)

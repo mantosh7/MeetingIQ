@@ -44,6 +44,7 @@ export const createMeeting = async (req, res, next) => {
       transcript: finalTranscript,
       summary,
       tasks: tasks || null,
+      userId: req.user.id
     });
 
     res.status(201).json({ success: true, data: meeting });
@@ -51,11 +52,12 @@ export const createMeeting = async (req, res, next) => {
   } catch (error) {
     
     // Agar JSON parse fail bhi ho, toh structured fallback do
-    return {
-      summary: raw.substring(0, 500), // raw text ko cap karo
-      participants: [],
-      action_items: []
-    };
+    // return {
+    //   summary: raw.substring(0, 500), // raw text ko cap karo
+    //   participants: [],
+    //   action_items: []
+    // };
+    next(error);
   } finally {
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
@@ -66,7 +68,7 @@ export const createMeeting = async (req, res, next) => {
 
 export const getAllMeeting = async (req, res, next) => {
   try {
-    const allMeetingData = await getAllMeetingService();
+    const allMeetingData = await getAllMeetingService(req.user.id)
     res.status(200).json({ success: true, message: allMeetingData });
   } catch (error) {
     next(error);
@@ -75,7 +77,7 @@ export const getAllMeeting = async (req, res, next) => {
 
 export const getMeetingById = async (req, res, next) => {
   try {
-    const meetingData = await getMeetingByIdService(req.params.id);
+    const meetingData = await getMeetingByIdService(req.params.id, req.user.id)
     if (!meetingData) {
       return res.status(404).json({ message: "Meeting not found" });
     }
@@ -84,3 +86,4 @@ export const getMeetingById = async (req, res, next) => {
     next(error);
   }
 };
+

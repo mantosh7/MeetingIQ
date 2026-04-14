@@ -1,3 +1,5 @@
+import axios from "axios";
+import toast from "react-hot-toast"; 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,8 +9,22 @@ export default function Signup() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    async function handleSubmit() {
+        try {
+            await axios.post("/api/auth/signup",
+                { name, email, password },
+            );
+
+            toast.success("Signup successful! ✅");
+            navigate("/login");
+
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Something went wrong");
+        }
+    }
+
     return (
-        <div className="h-screen bg-[#F5F4FA] relative">
+        <div className="h-screen bg-[#F5F4FA] flex items-center justify-center">
 
             {/* Home button */}
             <button
@@ -19,7 +35,7 @@ export default function Signup() {
             </button>
 
             {/* Centered content */}
-            <div className="h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center">
 
                 <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-purple-100">
 
@@ -44,7 +60,7 @@ export default function Signup() {
                         className="flex flex-col gap-4"
                         onSubmit={(e) => {
                             e.preventDefault();
-                            console.log(name, email, password);
+                            handleSubmit() ;
                         }}
                     >
 

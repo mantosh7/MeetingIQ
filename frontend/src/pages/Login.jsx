@@ -1,10 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast"; 
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
+    async function handleSubmit(){
+        try {
+            await axios.post("/api/auth/login",
+                {email, password},
+                {withCredentials: true}
+            ) ;
+
+            toast.success("Login Successful! ") ;
+            navigate("/dashboard") ;
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Something went wrong");
+        }
+    }
 
     return (
         <div className="h-screen bg-[#F5F4FA] relative">
@@ -39,7 +55,13 @@ export default function Login() {
                     </p>
 
                     {/* Form */}
-                    <form className="flex flex-col gap-4">
+                    <form
+                        className="flex flex-col gap-4"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit() ;
+                        }}
+                    >
 
                         <input
                             type="email"

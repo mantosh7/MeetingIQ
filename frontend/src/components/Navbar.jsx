@@ -1,4 +1,4 @@
-function Navbar({ onNewMeeting, search, setSearch }) {
+function Navbar({ onNewMeeting, search, setSearch, handleLogout }) {
   return (
     <nav className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-evenly">
       <div className="flex items-center gap-2">
@@ -21,6 +21,13 @@ function Navbar({ onNewMeeting, search, setSearch }) {
         className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-700"
       >
         + New Meeting
+      </button>
+
+      <button
+        onClick={handleLogout}
+        className="text-sm text-gray-500 hover:text-red-500 transition-colors"
+      >
+        Logout
       </button>
     </nav>
   )

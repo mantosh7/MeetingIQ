@@ -12,7 +12,7 @@ function MeetingDetail() {
     // fetching meeting detail of particular id
     async function fetchMeeting() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/meetings/${id}`)
+            const response = await axios.get(`/api/meetings/${id}`, { withCredentials: true })
             const m = response.data.message  // retrieving the actual meeting detail from the rsponse
             
             // parsing the tasks to apply filter on it
@@ -37,7 +37,7 @@ function MeetingDetail() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
-            <button onClick={() => navigate('/')} className="text-sm text-gray-400 hover:text-gray-600 mb-6 block">
+            <button onClick={() => navigate('/dashboard')} className="text-sm text-gray-400 hover:text-gray-600 mb-6 block">
                 ← Back
             </button>
 
