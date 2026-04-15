@@ -1,10 +1,33 @@
 import { useState } from "react";
 import landingPageImage from "../assets/landingpage.png";
-import {useNavigate} from "react-router-dom" ;
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function MeetingIQHomepage() {
     const [email, setEmail] = useState("");
-    const navigate = useNavigate() ;
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    async function findUser() {
+        try {
+            const res = await axios.get("/api/user/me", { withCredentials: true });
+            console.log("ME API RESPONSE:", res.data);
+            setUser(res.data.user);
+        } catch (error) {
+            console.log("ME API ERROR:", error.response?.data);
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        findUser();
+    }, [])
+
+
 
     return (
         <div className="h-screen overflow-hidden flex flex-col bg-[#F5F4FA]">
@@ -12,7 +35,7 @@ export default function MeetingIQHomepage() {
             {/* ── NAV ── */}
             <nav className="flex items-center justify-between px-12 h-16 shrink-0 z-50">
                 <div className="flex items-center gap-3 ml-10">
-                    <div className="w-9 h-9 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm bg-gradient-to-r from-violet-700 to-purple-600">
                         M
                     </div>
                     <span className="text-black font-semibold text-lg">
@@ -21,12 +44,30 @@ export default function MeetingIQHomepage() {
                 </div>
 
                 <div className="flex items-center">
-                    <button onClick={()=>navigate("/signup")} className="text-sm px-5 py-2 rounded-full bg-purple-600 text-white font-medium mr-4 hover:bg-purple-700 transition-colors">
-                        Register
-                    </button>
-                    <button onClick={()=>navigate("/login")} className="text-sm px-5 py-2 rounded-full bg-purple-600 text-white font-medium mr-10 hover:bg-purple-700 transition-colors">
-                        Log In
-                    </button>
+                    {loading ? null : user ? (
+                        <button
+                            onClick={() => navigate("/dashboard")}
+                            className="text-white px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-800 hover:to-purple-700 transition"
+                        >
+                            Start →
+                        </button>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() => navigate("/signup")}
+                                className="text-sm px-5 py-2 rounded-full text-white font-medium 
+                                mr-4 bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-800 hover:to-purple-700 transition">
+                                Register
+                            </button>
+
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="text-sm px-5 py-2 rounded-full text-white font-medium mr-4 
+                                            bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-800 hover:to-purple-700 transition">
+                                Log In
+                            </button>
+                        </>
+                    )}
                 </div>
             </nav>
 
@@ -63,7 +104,7 @@ export default function MeetingIQHomepage() {
                             onChange={(e) => setEmail(e.target.value)}
                             className="flex-1 text-sm text-gray-700 bg-transparent outline-none placeholder-gray-300"
                         />
-                        <button className="text-sm px-5 py-2 bg-purple-600 text-white rounded-full font-medium hover:bg-purple-700 transition-colors whitespace-nowrap">
+                        <button className="text-sm px-5 py-2 text-white rounded-full font-medium bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-800 hover:to-purple-700 transition transition-colors whitespace-nowrap">
                             Get Started
                         </button>
                     </div>

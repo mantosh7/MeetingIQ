@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { PrismaClient } from "@prisma/client";
 import meetingRoutes from "./routes/meeting.routes.js"
 import authRoutes from "./routes/auth.routes.js" ;
+import userRoutes from "./routes/user.routes.js" ;
 import { errorHandler } from "./middleware/error.middleware.js";
 import { appLimiter } from "./middleware/rateLimiter.middleware.js";
 
@@ -21,6 +22,7 @@ app.use(express.json()) ;
 app.use("/api", appLimiter) ;
 app.use("/api/meetings", meetingRoutes) ;
 app.use("/api/auth", authRoutes) ;
+app.use("/api/user", userRoutes) ;
 app.use(errorHandler) ;
 
 const PORT = process.env.PORT || 5000 ;

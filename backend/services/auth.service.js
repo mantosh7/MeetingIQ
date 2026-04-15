@@ -1,6 +1,6 @@
-import prisma from "../prisma/client.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import prisma from "../prisma/client.js";
 
 export const signupUser = async ({ name, email, password }) => {
     if (!name || !email || !password) throw new Error("User detail missing");
@@ -34,4 +34,3 @@ export const loginUser = async ({ email, password }) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     return { token } ;
 };
-

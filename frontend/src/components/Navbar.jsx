@@ -1,8 +1,8 @@
 function Navbar({ onNewMeeting, search, setSearch, handleLogout }) {
   return (
-    <nav className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-evenly">
+    <nav className="bg-white border-gray-200 px-6 py-2 flex items-center justify-between">
       <div className="flex items-center gap-2">
-        <div className="bg-purple-600 text-white rounded-full w-9 h-9 flex items-center justify-center font-bold">
+        <div className="bg-gradient-to-r from-violet-700 to-purple-600 text-white rounded-full w-9 h-9 flex items-center justify-center font-bold">
           M
         </div>
         <span className="text-xl font-semibold text-gray-800">MeetingIQ</span>
@@ -18,16 +18,9 @@ function Navbar({ onNewMeeting, search, setSearch, handleLogout }) {
 
       <button
         onClick={onNewMeeting}
-        className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-700"
+        className="text-white px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-800 hover:to-purple-700 transition"
       >
         + New Meeting
-      </button>
-
-      <button
-        onClick={handleLogout}
-        className="text-sm text-gray-500 hover:text-red-500 transition-colors"
-      >
-        Logout
       </button>
     </nav>
   )
