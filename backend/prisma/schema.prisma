@@ -14,7 +14,7 @@ model User {
   password  String
   createdAt DateTime  @default(now())
 
-  meetings  Meeting[]  // relation (1 user → many meetings)
+  meetings  Meeting[]  // relation (1 user -> many meetings)
 }
 
 model Meeting {

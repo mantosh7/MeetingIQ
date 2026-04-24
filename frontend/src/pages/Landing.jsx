@@ -13,7 +13,6 @@ export default function MeetingIQHomepage() {
     async function findUser() {
         try {
             const res = await axios.get("/api/user/me", { withCredentials: true });
-            console.log("ME API RESPONSE:", res.data);
             setUser(res.data.user);
         } catch (error) {
             console.log("ME API ERROR:", error.response?.data);
@@ -32,7 +31,7 @@ export default function MeetingIQHomepage() {
     return (
         <div className="h-screen overflow-hidden flex flex-col bg-[#F5F4FA]">
 
-            {/* ── NAV ── */}
+            {/* navbar*/}
             <nav className="flex items-center justify-between px-12 h-16 shrink-0 z-50">
                 <div className="flex items-center gap-3 ml-10">
                     <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm bg-gradient-to-r from-violet-700 to-purple-600">
@@ -71,7 +70,7 @@ export default function MeetingIQHomepage() {
                 </div>
             </nav>
 
-            {/* ── HERO ── */}
+            {/* hero section*/}
             <div className="flex items-center flex-1 px-12 gap-20 overflow-hidden">
 
                 {/* LEFT */}
